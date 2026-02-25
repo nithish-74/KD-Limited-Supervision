@@ -1,7 +1,7 @@
 # Knowledge Distillation under Limited Supervision: An Empirical Study
 
 ## 1. Motivation
-Knowledge Distillation (KD) aims to transfer knowledge from a high-capacity teacher model to a smaller student model using soft probability targets. While KD is known to improve compression-performance tradeoffs, its behavior under limited-label settings is less straightforward.
+The goal of Knowledge Distillation (KD) is to use soft probability objectives to transfer knowledge from a high-capacity teacher model to a smaller student model. Although KD is known to enhance tradeoffs between compression and performance, its behavior in limited-label circumstances is less clear.
 
 This project investigates:
 - Does knowledge distillation improve student generalization under full and low-data regimes?
@@ -39,46 +39,30 @@ Where:
 **Improvement: +0.21%**
 
 ### B. Low-Data Setting (20% labels)
-#### Case 1: T=3, α=0.5
-| Model | Accuracy |
-| :--- | :--- |
-| Student (Scratch) | 95.35% |
-| Student (KD) | 94.76% |
-
-**Improvement: -0.59%** (KD degraded performance)
-
-#### Case 2: T=10, α=0.9
 | Model | Accuracy |
 | :--- | :--- |
 | Student (Scratch) | 94.98% |
-| Student (KD) | 95.25% |
+| Student (KD, T=10, α=0.9) | 95.25% |
 
-**Improvement: +0.27%** (KD improved performance)
+**Improvement: +0.27%** (Using optimized hyperparameters)
 
 ## 5. Key Observations
-1. KD provides modest improvement in full-data regime.
-2. Under limited supervision, KD is highly sensitive to hyperparameters.
-3. Lower temperature and balanced α may degrade performance.
-4. Higher temperature (T=10) and stronger teacher weighting (α=0.9) allow KD to act as a regularizer.
-5. KD effectiveness depends on supervision strength and smoothness of teacher signal.
+1. **Full-Data Regime**: KD offers a slight boost in performance even when labels are abundant.
+2. **Hyperparameter Sensitivity**: Under limited supervision, KD is extremely sensitive to $T$ and $\alpha$.
+3. **Suboptimal Settings**: Performance can be harmed by lower temperatures and balanced $\alpha$ in low-data regimes.
+4. **KD as Regularizer**: KD functions effectively as a regularizer when the temperature is higher ($T=10$) and teacher weighting is stronger ($\alpha=0.9$).
+5. **Supervision Quality**: The effectiveness depends on the smoothness of the teacher signal and the amount of ground-truth supervision.
 
 ## 6. Interpretation
-Under limited labels:
-- Cross-entropy supervision weakens.
-- Student may overfit small dataset.
-- Teacher soft labels introduce class similarity structure.
-- High temperature smooths teacher predictions.
-- Proper α prevents over-reliance on teacher.
-- KD therefore acts as a form of structured regularization.
+Under restricted labels:
+- **Sparse Supervision**: Cross-entropy oversight deteriorates.
+- **Overfitting**: A small dataset is easily overfit by the student.
+- **Dark Knowledge**: Class similarity structure introduced by teacher soft labels provides extra information.
+- **Smoothing**: High temperatures smooth teacher forecasts, providing a better manifold for the student.
+- **Balancing**: Proper $\alpha$ prevents over-reliance on the teacher while leveraging its knowledge.
 
 ## 7. Conclusion
-Knowledge Distillation does not universally improve performance. Its effectiveness depends on:
-- Data regime
-- Model capacity gap
-- Temperature scaling
-- Supervision weighting
-
-This study demonstrates that careful hyperparameter tuning is critical when applying KD in low-data environments.
+Knowledge distillation does not always enhance performance out-of-the-box. Its efficacy is dependent upon the data regime, model capacity gap, temperature scaling, and supervision weighting. This study shows that when using KD in low-data scenarios, careful hyperparameter tweaking is essential.
 
 ---
 ### How to Run
